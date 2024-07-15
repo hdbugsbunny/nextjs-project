@@ -2,7 +2,7 @@ import { useState } from "react";
 import classes from "./NewPost.module.css";
 
 export default function NewPost(props) {
-  const { onCancel } = props;
+  const { onAddPost, onCancel } = props;
   const [enteredBody, setEnteredBody] = useState("");
   const [enteredAuthor, setEnteredAuthor] = useState("");
 
@@ -20,8 +20,7 @@ export default function NewPost(props) {
       author: enteredAuthor,
       body: enteredBody,
     };
-    console.log("🚀 ~ submitHandler ~ postData:", postData);
-    onCancel();
+    onAddPost(postData);
   }
 
   return (
