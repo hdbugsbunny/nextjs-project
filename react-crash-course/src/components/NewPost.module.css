@@ -24,6 +24,12 @@
 }
 
 .actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.actions button {
   cursor: pointer;
   font: inherit;
   padding: 0.5rem 1.5rem;
