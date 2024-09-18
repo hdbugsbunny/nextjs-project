@@ -3,7 +3,7 @@ export default function MealDetailsPage(props) {
   return (
     <main>
       <h1 style={{ color: "white", textAlign: "center" }}>Meal Details Page</h1>
-      <p>Meal ID: {params.mealId}</p>
+      <p style={{ textAlign: "center" }}>Meal ID: {params.mealId}</p>
     </main>
   );
 }
