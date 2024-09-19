@@ -1,9 +1,32 @@
-export default function MealDetailsPage(props) {
-  const { params } = props;
+import { getMealsById } from "@/lib/mealsLib";
+import Image from "next/image";
+import classes from "./page.module.css";
+
+export default function MealDetailsPage({ params }) {
+  const meal = getMealsById(params.mealId);
+
   return (
-    <main>
-      <h1 style={{ color: "white", textAlign: "center" }}>Meal Details Page</h1>
-      <p style={{ textAlign: "center" }}>Meal ID: {params.mealId}</p>
-    </main>
+    <>
+      <header className={classes.header}>
+        <div className={classes.image}>
+          <Image src={meal.image} alt={meal.title} fill />
+        </div>
+        <div className={classes.headerText}>
+          <h1>{meal.title}</h1>
+          <p className={classes.creator}>
+            by <a href={`mailto:${meal.creator_email}`}>{meal.creator}</a>
+          </p>
+          <p className={classes.summary}>{meal.summary}</p>
+        </div>
+      </header>
+      <main>
+        <p
+          className={classes.instructions}
+          dangerouslySetInnerHTML={{
+            __html: meal.instructions.replace(/\n/g, "<br />"),
+          }}
+        ></p>
+      </main>
+    </>
   );
 }
