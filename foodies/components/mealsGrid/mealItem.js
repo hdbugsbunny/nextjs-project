@@ -10,7 +10,7 @@ export default function MealItem(props) {
       <header>
         <div className={classes.image}>
           <Image
-            src={image}
+            src={`https://harshit-nextjs-demo-users-image.s3.ap-south-1.amazonaws.com/${image}`}
             alt={title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
