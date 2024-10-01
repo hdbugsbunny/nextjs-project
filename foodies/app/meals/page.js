@@ -5,6 +5,11 @@ import { Suspense } from "react";
 import MealsLoadingPage from "./loading-out";
 import classes from "./page.module.css";
 
+export const metadata = {
+  title: "All Meals",
+  description: "Browse The Delicious Meals, shared by a food-loving community.",
+};
+
 async function Meals() {
   const meals = await getMeals();
 
