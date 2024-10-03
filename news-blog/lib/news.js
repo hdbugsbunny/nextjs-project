@@ -1,7 +1,11 @@
 import { DUMMY_NEWS } from "@/dummyNews";
+import sql from "better-sqlite3";
+
+const newsDB = sql("data.db");
 
 export function getAllNews() {
-  return DUMMY_NEWS;
+  const news = newsDB.prepare("SELECT * FROM news").all();
+  return news;
 }
 
 export function getLatestNews() {
