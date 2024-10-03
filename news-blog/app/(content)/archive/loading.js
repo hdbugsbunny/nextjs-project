@@ -1,3 +1,3 @@
 export default function ArchiveLoading() {
-  return <p>Loading Latest News...</p>;
+  return <p>Fetching Latest News...</p>;
 }
