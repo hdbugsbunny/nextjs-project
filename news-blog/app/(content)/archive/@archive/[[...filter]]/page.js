@@ -7,21 +7,21 @@ import {
 } from "@/lib/news";
 import Link from "next/link";
 
-export default function FilteredNewsPage({ params }) {
+export default async function FilteredNewsPage({ params }) {
   const { filter } = params;
   const selectedYear = filter?.[0],
     selectedMonth = filter?.[1];
   let news,
-    links = getAvailableNewsYears(),
+    links = await getAvailableNewsYears(),
     newsContent = <p>No News Found For The Selected Period!</p>;
 
   if (selectedYear && !selectedMonth) {
-    news = getNewsForYear(selectedYear);
+    news = await getNewsForYear(selectedYear);
     links = getAvailableNewsMonths(selectedYear);
   }
 
   if (selectedYear && selectedMonth) {
-    news = getNewsForYearAndMonth(selectedYear, selectedMonth);
+    news = await getNewsForYearAndMonth(selectedYear, selectedMonth);
     links = [];
   }
 
@@ -30,9 +30,8 @@ export default function FilteredNewsPage({ params }) {
   }
 
   if (
-    (selectedYear && !getAvailableNewsYears().includes(+selectedYear)) ||
-    (selectedMonth &&
-      !getAvailableNewsMonths(selectedYear).includes(+selectedMonth))
+    (selectedYear && !(await getAvailableNewsYears())) ||
+    (selectedMonth && !getAvailableNewsMonths(selectedYear))
   ) {
     throw new Error("Invalid Period Filter!");
   }
