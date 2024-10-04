@@ -1,8 +1,11 @@
+"use client";
+
 import { toggleBlogLikeStatus } from "@/actions/blogs";
 import { formatDate } from "@/lib/format";
+import { useOptimistic } from "react";
 import LikeButton from "./like-icon";
 
-function Blog({ blog }) {
+function Blog({ blog, action }) {
   return (
     <article className="blog">
       <div className="blog-image">
@@ -21,7 +24,7 @@ function Blog({ blog }) {
           </div>
           <div>
             <form
-              action={toggleBlogLikeStatus.bind(null, blog.id)}
+              action={action.bind(null, blog.id)}
               className={blog.isLiked ? "liked" : ""}
             >
               <LikeButton />
@@ -35,15 +38,33 @@ function Blog({ blog }) {
 }
 
 export default function Blogs({ blogs }) {
-  if (!blogs || blogs.length === 0) {
+  const [optimisticBlogs, updateOptimisticBlogs] = useOptimistic(
+    blogs,
+    (prevBlogs, updatedBlogId) => {
+      const updatedBlogs = [...prevBlogs];
+      const updatedBlog = updatedBlogs.find((b) => b.id === updatedBlogId);
+      if (updatedBlog) {
+        updatedBlog.likes = updatedBlog.likes + (updatedBlog.isLiked ? -1 : 1);
+        updatedBlog.isLiked = !updatedBlog.isLiked;
+      }
+      return updatedBlogs;
+    }
+  );
+
+  if (!optimisticBlogs || optimisticBlogs.length === 0) {
     return <p>There are no blogs yet. Maybe start sharing some?</p>;
+  }
+
+  async function updateLikes(blogId) {
+    updateOptimisticBlogs(blogId);
+    await toggleBlogLikeStatus(blogId);
   }
 
   return (
     <ul className="blogs">
-      {blogs.map((blog) => (
+      {optimisticBlogs.map((blog) => (
         <li key={blog.id}>
-          <Blog blog={blog} />
+          <Blog blog={blog} action={updateLikes} />
         </li>
       ))}
     </ul>
