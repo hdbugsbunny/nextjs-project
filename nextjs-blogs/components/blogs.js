@@ -1,3 +1,4 @@
+import { toggleBlogLikeStatus } from "@/actions/blogs";
 import { formatDate } from "@/lib/format";
 import LikeButton from "./like-icon";
 
@@ -19,7 +20,12 @@ function Blog({ blog }) {
             </p>
           </div>
           <div>
-            <LikeButton />
+            <form
+              action={toggleBlogLikeStatus.bind(null, blog.id)}
+              className={blog.isLiked ? "liked" : ""}
+            >
+              <LikeButton />
+            </form>
           </div>
         </header>
         <p>{blog.content}</p>

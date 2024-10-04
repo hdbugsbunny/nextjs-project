@@ -1,6 +1,6 @@
 "use server";
 
-import { storeBlog } from "@/lib/blogs";
+import { storeBlog, updateBlogLikeStatus } from "@/lib/blogs";
 import { uploadImage } from "@/lib/cloudinary";
 import { redirect } from "next/navigation";
 
@@ -34,4 +34,8 @@ export async function createBlog(_, formData) {
 
   await storeBlog({ imageUrl, title, content, userId: 1 });
   redirect("/feed");
+}
+
+export async function toggleBlogLikeStatus(blogId) {
+  await updateBlogLikeStatus(blogId, 2);
 }
