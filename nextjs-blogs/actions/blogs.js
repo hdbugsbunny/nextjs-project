@@ -1,6 +1,7 @@
 "use server";
 
 import { storeBlog } from "@/lib/blogs";
+import { uploadImage } from "@/lib/cloudinary";
 import { redirect } from "next/navigation";
 
 export async function createBlog(_, formData) {
@@ -22,6 +23,15 @@ export async function createBlog(_, formData) {
     return { errors };
   }
 
-  await storeBlog({ imageUrl: "", title, content, userId: 1 });
+  let imageUrl = "";
+  try {
+    imageUrl = await uploadImage(image);
+  } catch (error) {
+    throw new Error(
+      "Image Upload Failed, Blog Was Not Created. Please Try Again Later!"
+    );
+  }
+
+  await storeBlog({ imageUrl, title, content, userId: 1 });
   redirect("/feed");
 }
