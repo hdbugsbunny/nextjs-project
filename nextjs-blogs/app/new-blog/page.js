@@ -1,4 +1,6 @@
+import FormSubmit from "@/components/form-submit";
 import { storeBlog } from "@/lib/blogs";
+import { redirect } from "next/navigation";
 
 export default function NewBlogPage() {
   async function createBlog(formData) {
@@ -7,7 +9,8 @@ export default function NewBlogPage() {
     const image = formData.get("image");
     const content = formData.get("content");
 
-    storeBlog({ imageUrl: "", title, content, userId: 1 });
+    await storeBlog({ imageUrl: "", title, content, userId: 1 });
+    redirect("/feed");
   }
 
   return (
@@ -27,8 +30,7 @@ export default function NewBlogPage() {
           <textarea id="content" name="content" rows="5" />
         </p>
         <p className="form-actions">
-          <button type="reset">Clear Form</button>
-          <button>Create Blog</button>
+          <FormSubmit />
         </p>
       </form>
     </>
