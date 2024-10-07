@@ -24,5 +24,6 @@ export const getAllMessages = unstable_cache(
     console.log("Fetching all messages from DB...");
     return messagesDB.prepare("SELECT * FROM messages").all();
   }),
-  ["messages"]
+  ["messages"],
+  { tags: ["msg"] }
 );
