@@ -5,13 +5,13 @@ import { getAllMessages } from "@/lib/messages";
 // export const revalidate = 5;
 // export const dynamic = "force-dynamic";
 
-export default function MessagesPage() {
+export default async function MessagesPage() {
   //   unstable_noStore();
   //   const response = await fetch("http://localhost:8080/messages", {
   //     next: { tags: ["msg"] },
   //   });
   //   const messages = await response.json();
-  const messages = getAllMessages();
+  const messages = await getAllMessages();
   if (!messages || messages.length === 0) {
     return <p>No Messages Found!</p>;
   }
