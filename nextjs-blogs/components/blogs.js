@@ -2,14 +2,28 @@
 
 import { toggleBlogLikeStatus } from "@/actions/blogs";
 import { formatDate } from "@/lib/format";
+import Image from "next/image";
 import { useOptimistic } from "react";
 import LikeButton from "./like-icon";
+
+function imageLoader(config) {
+  const [urlStart, urlEnd] = config.src.split("upload/");
+  const transformations = `w_200,q_${config.quality}`;
+  return `${urlStart}upload/${transformations}/${urlEnd}`;
+}
 
 function Blog({ blog, action }) {
   return (
     <article className="blog">
       <div className="blog-image">
-        <img src={blog.image} alt={blog.title} />
+        <Image
+          loader={imageLoader}
+          src={blog.image}
+          alt={blog.title}
+          width={200}
+          height={120}
+          quality={50}
+        />
       </div>
       <div className="blog-content">
         <header>
