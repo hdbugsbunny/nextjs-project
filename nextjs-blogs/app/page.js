@@ -2,6 +2,11 @@ import Blogs from "@/components/blogs";
 import { getBlogs } from "@/lib/blogs";
 import { Suspense } from "react";
 
+export const metadata = {
+  title: "NextJS Latest Blogs | Home",
+  description: "Discover Our Amazing Blogs!",
+};
+
 async function LatestBlogs() {
   const latestBlogs = await getBlogs(2);
   return <Blogs blogs={latestBlogs} />;
