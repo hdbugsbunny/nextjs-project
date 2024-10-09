@@ -7,3 +7,8 @@ export function createUser(email, password) {
 
   return result.lastInsertRowid;
 }
+
+export function getUserByEmail(email) {
+  const stmt = trainingDB.prepare("SELECT * FROM users WHERE email =?");
+  return stmt.get(email);
+}
