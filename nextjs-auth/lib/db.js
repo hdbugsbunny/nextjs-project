@@ -29,7 +29,7 @@ trainingDB.exec(`
 `);
 
 const hasTrainings =
-  trainingDB.prepare("SELECT COUNT(*) as COUNT FROM trainings").get().count > 0;
+  trainingDB.prepare("SELECT COUNT(*) as count FROM trainings").get().count > 0;
 
 if (!hasTrainings) {
   trainingDB.exec(`

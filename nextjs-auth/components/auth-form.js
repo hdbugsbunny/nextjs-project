@@ -8,7 +8,7 @@ export default function AuthForm() {
   const [formState, formAction] = useFormState(signUp, {});
 
   return (
-    <form id="auth-form" action={formAction}>
+    <form id="auth-form" action={formAction} autoComplete="off">
       <div>
         <img src={"/images/auth-icon.jpg"} alt="A Lock Icon" />
       </div>
