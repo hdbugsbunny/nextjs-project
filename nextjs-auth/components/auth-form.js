@@ -1,11 +1,11 @@
 "use client";
 
-import { signUp } from "@/actions/auth-actions";
+import { authAction } from "@/actions/auth-actions";
 import Link from "next/link";
 import { useFormState } from "react-dom";
 
 export default function AuthForm({ mode }) {
-  const [formState, formAction] = useFormState(signUp, {});
+  const [formState, formAction] = useFormState(authAction.bind(null, mode), {});
 
   return (
     <form id="auth-form" action={formAction} autoComplete="off">

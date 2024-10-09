@@ -5,7 +5,7 @@ import { hashUserPassword, verifyPassword } from "@/lib/hash";
 import { createUser, getUserByEmail } from "@/lib/user";
 import { redirect } from "next/navigation";
 
-export async function signUp(_, formData) {
+async function signUp(_, formData) {
   const email = formData.get("email");
   const password = formData.get("password");
 
@@ -33,7 +33,7 @@ export async function signUp(_, formData) {
   }
 }
 
-export async function logIn(_, formData) {
+async function logIn(_, formData) {
   const email = formData.get("email");
   const password = formData.get("password");
 
@@ -49,4 +49,9 @@ export async function logIn(_, formData) {
 
   await createAuthSession(existingUser.id);
   redirect("/training");
+}
+
+export async function authAction(mode, _, formData) {
+  const action = mode === "login" ? logIn : signUp;
+  return await action(_, formData);
 }
