@@ -7,7 +7,7 @@ export default function EventList(props) {
   return (
     <ul className={classes.list}>
       {events.map((event) => (
-        <EventItem event={event} />
+        <EventItem key={event.id} event={event} />
       ))}
     </ul>
   );

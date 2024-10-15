@@ -16,7 +16,7 @@ export default function EventItem(props) {
   const formattedLink = `/events/${id}`;
 
   return (
-    <li key={id} className={classes.item}>
+    <li className={classes.item}>
       <img src={formattedImage} alt={title} />
       <div className={classes.content}>
         <div className={classes.summary}>
