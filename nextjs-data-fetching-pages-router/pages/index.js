@@ -1,6 +1,5 @@
-import fs from "fs/promises";
+import getData from "@/util/fetchingData";
 import Link from "next/link";
-import path from "path";
 
 export default function HomePage(props) {
   const { products } = props;
@@ -19,9 +18,7 @@ export default function HomePage(props) {
 export async function getStaticProps() {
   console.log("Re-Generating...");
 
-  const filePath = path.join(process.cwd(), "data", "dummyBackend.json");
-  const jsonData = await fs.readFile(filePath);
-  const data = JSON.parse(jsonData);
+  const data = await getData();
   if (!data) {
     return { redirect: { destination: "/noData" } };
   }

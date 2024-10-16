@@ -1,5 +1,4 @@
-import fs from "fs/promises";
-import path from "path";
+import getData from "@/util/fetchingData";
 
 export default function ProductDetailPage(props) {
   const { product } = props;
@@ -15,9 +14,7 @@ export default function ProductDetailPage(props) {
 
 export async function getStaticProps(context) {
   const { pId } = context.params;
-  const filePath = path.join(process.cwd(), "data", "dummyBackend.json");
-  const jsonData = await fs.readFile(filePath);
-  const data = JSON.parse(jsonData);
+  const data = await getData();
   if (!data) {
     return { redirect: { destination: "/noData" } };
   }
@@ -34,8 +31,17 @@ export async function getStaticProps(context) {
 }
 
 export async function getStaticPaths() {
-  return {
-    paths: [{ params: { pId: "p1" } }],
-    fallback: "blocking",
-  };
+  const data = await getData();
+  if (!data) {
+    return { paths: [], fallback: "blocking" };
+  }
+  if (data.products.length === 0) {
+    return { paths: [], fallback: "blocking" };
+  }
+
+  const paths = data.products.map((product) => ({
+    params: { pId: product.id },
+  }));
+
+  return { paths, fallback: "blocking" };
 }
