@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function UserProfilePage(props) {
   const { user } = props;
   if (!user) return <p>Loading...</p>;
@@ -5,7 +7,9 @@ export default function UserProfilePage(props) {
   return (
     <>
       <h1>User Profile</h1>
-      <p>Name: {user.name}</p>
+      <Link href={`/userProfile/${user.userId}`}>
+        <p>Name: {user.name}</p>
+      </Link>
       <p>Email: {user.email}</p>
     </>
   );
@@ -14,5 +18,9 @@ export default function UserProfilePage(props) {
 export async function getServerSideProps(context) {
   const { params, req, res } = context;
 
-  return { props: { user: { name: "Harshit", email: "harshit@example.com" } } };
+  return {
+    props: {
+      user: { userId: "u1", name: "Harshit", email: "harshit@example.com" },
+    },
+  };
 }
