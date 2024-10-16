@@ -2,7 +2,7 @@ import getData from "@/util/fetchingData";
 
 export default function ProductDetailPage(props) {
   const { product } = props;
-  // if (!product) return <p>Loading...</p>;
+  if (!product) return <p>Loading...</p>;
 
   return (
     <>
@@ -24,7 +24,7 @@ export async function getStaticProps(context) {
 
   const productData = data.products.find((product) => product.id === pId);
   if (!productData) {
-    return { redirect: { destination: "/noData" } };
+    return { notFound: true };
   }
 
   return { props: { product: productData } };
@@ -33,10 +33,10 @@ export async function getStaticProps(context) {
 export async function getStaticPaths() {
   const data = await getData();
   if (!data) {
-    return { paths: [], fallback: "blocking" };
+    return { paths: [], fallback: true };
   }
   if (data.products.length === 0) {
-    return { paths: [], fallback: "blocking" };
+    return { paths: [], fallback: true };
   }
 
   const paths = data.products.map((product) => ({
