@@ -1,29 +1,44 @@
 import { useEffect, useState } from "react";
+import useSWR from "swr";
 
 export default function LastSalesPage() {
   const [sales, setSales] = useState();
-  const [isLoading, setIsLoading] = useState(false);
+  //   const [isLoading, setIsLoading] = useState(false);
+  const { data, error } = useSWR(
+    "https://nextjs-temp-course-default-rtdb.firebaseio.com/sales.json",
+    (url) => fetch(url).then((res) => res.json())
+  );
 
   useEffect(() => {
-    setIsLoading(true);
-    fetch("https://nextjs-temp-course-default-rtdb.firebaseio.com/sales.json")
-      .then((response) => response.json())
-      .then((responseData) => {
-        const salesArray = [];
-        for (const key in responseData) {
-          salesArray.push({ id: key, ...responseData[key] });
-        }
-        setSales(salesArray);
-        setIsLoading(false);
-      });
-  }, []);
+    if (data) {
+      const salesArray = [];
+      for (const key in data) {
+        salesArray.push({ id: key, ...data[key] });
+      }
+      setSales(salesArray);
+    }
+  }, [data]);
 
-  if (isLoading) {
-    return <p>Loading...</p>;
+  //   useEffect(() => {
+  //     setIsLoading(true);
+  //     fetch("https://nextjs-temp-course-default-rtdb.firebaseio.com/sales.json")
+  //       .then((response) => response.json())
+  //       .then((responseData) => {
+  //         const salesArray = [];
+  //         for (const key in responseData) {
+  //           salesArray.push({ id: key, ...responseData[key] });
+  //         }
+  //         setSales(salesArray);
+  //         setIsLoading(false);
+  //       });
+  //   }, []);
+
+  if (error) {
+    return <p>Failed To Load!</p>;
   }
 
-  if (!sales) {
-    return <p>No Sales Found!</p>;
+  if (!data || !sales) {
+    return <p>Loading...</p>;
   }
 
   return (
