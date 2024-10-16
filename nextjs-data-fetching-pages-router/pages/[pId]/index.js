@@ -31,3 +31,14 @@ export async function getStaticProps(context) {
 
   return { props: { product: productData } };
 }
+
+export async function getStaticPaths() {
+  return {
+    paths: [
+      { params: { pId: "p1" } },
+      { params: { pId: "p2" } },
+      { params: { pId: "p3" } },
+    ],
+    fallback: false,
+  };
+}
