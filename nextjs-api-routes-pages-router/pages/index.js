@@ -6,8 +6,8 @@ export default function HomePage() {
   const submitHandler = (event) => {
     event.preventDefault();
 
-    const email = emailRef.current.value;
-    const feedback = feedbackRef.current.value;
+    const email = emailRef.current.value || "test@example.com";
+    const feedback = feedbackRef.current.value || "Some Feedback";
   };
 
   return (
