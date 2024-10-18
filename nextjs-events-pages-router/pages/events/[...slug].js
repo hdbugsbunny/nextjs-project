@@ -28,12 +28,33 @@ export default function EventsFilteredPage() {
     }
   }, [data]);
 
+  let pageHeadContent = (
+    <Head>
+      <title>Filtered Events - NextJS Events App</title>
+      <meta name="description" content="Discover filtered events." />
+    </Head>
+  );
+
   if (!slug || !loadedEvents) {
-    return <p className="center">Loading...</p>;
+    return (
+      <>
+        {pageHeadContent}
+        <p className="center">Loading...</p>
+      </>
+    );
   }
 
   const numYear = +slug[0];
   const numMonth = +slug[1];
+  pageHeadContent = (
+    <Head>
+      <title>Filtered Events - NextJS Events App</title>
+      <meta
+        name="description"
+        content={`All events for ${numYear}/${numMonth}.`}
+      />
+    </Head>
+  );
   if (
     isNaN(numYear) ||
     isNaN(numMonth) ||
@@ -45,6 +66,7 @@ export default function EventsFilteredPage() {
   ) {
     return (
       <div className="center">
+        {pageHeadContent}
         <ErrorAlert>Invalid Date! Please Adjust Your Values!</ErrorAlert>
         <LinkButton href={"/events"}>Show All Events!</LinkButton>
       </div>
@@ -61,6 +83,7 @@ export default function EventsFilteredPage() {
   if (!filteredEvents || filteredEvents.length === 0) {
     return (
       <div className="center">
+        {pageHeadContent}
         <ErrorAlert>No Events Found for the Given Date!</ErrorAlert>
         <LinkButton href={"/events"}>Show All Events!</LinkButton>
       </div>
@@ -71,13 +94,7 @@ export default function EventsFilteredPage() {
 
   return (
     <>
-      <Head>
-        <title>Filtered Events - NextJS Events App</title>
-        <meta
-          name="description"
-          content={`All events for ${numYear}/${numMonth}.`}
-        />
-      </Head>
+      {pageHeadContent}
       <ResultsTitle date={date} />
       <EventList events={filteredEvents} />
     </>
