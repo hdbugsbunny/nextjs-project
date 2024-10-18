@@ -1,8 +1,9 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 export default function HomePage() {
   const emailRef = useRef();
   const feedbackRef = useRef();
+  const [allFeedbacks, setAllFeedbacks] = useState([]);
   const submitHandler = (event) => {
     event.preventDefault();
 
@@ -19,6 +20,13 @@ export default function HomePage() {
       .catch((error) => console.error("Error sending feedback:", error));
   };
 
+  const getAllFeedbacks = () => {
+    fetch("/api/feedback")
+      .then((response) => response.json())
+      .then((data) => setAllFeedbacks(data.feedbackData))
+      .catch((error) => console.error("Error fetching feedback:", error));
+  };
+
   return (
     <div>
       <h1>Home Page!</h1>
@@ -33,6 +41,15 @@ export default function HomePage() {
         </div>
         <button>Send Feedback!</button>
       </form>
+      <hr />
+      <button onClick={getAllFeedbacks}>Get All Feedbacks!</button>
+      <ul>
+        {allFeedbacks.map((feedbacks) => (
+          <li key={feedbacks.id}>
+            {feedbacks.email} - {feedbacks.feedback}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
