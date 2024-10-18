@@ -2,6 +2,7 @@ import EventContent from "@/components/eventDetail/eventContent";
 import EventLogistics from "@/components/eventDetail/eventLogistics";
 import EventSummary from "@/components/eventDetail/eventSummary";
 import { getEventById, getFeaturedEvents } from "@/helpers/utils";
+import Head from "next/head";
 
 export default function EventDetailsPage(props) {
   const { event } = props;
@@ -11,6 +12,10 @@ export default function EventDetailsPage(props) {
 
   return (
     <>
+      <Head>
+        <title>{event.title} - NextJS Events App</title>
+        <meta name="description" content={event.description} />
+      </Head>
       <EventSummary title={event.title} />
       <EventLogistics event={event} />
       <EventContent>

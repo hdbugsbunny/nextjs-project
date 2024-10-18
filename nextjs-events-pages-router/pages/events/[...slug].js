@@ -2,6 +2,7 @@ import EventList from "@/components/events/eventList";
 import ResultsTitle from "@/components/events/resultsTitle";
 import ErrorAlert from "@/components/ui/errorAlert";
 import LinkButton from "@/components/ui/linkButton";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
@@ -70,6 +71,13 @@ export default function EventsFilteredPage() {
 
   return (
     <>
+      <Head>
+        <title>Filtered Events - NextJS Events App</title>
+        <meta
+          name="description"
+          content={`All events for ${numYear}/${numMonth}.`}
+        />
+      </Head>
       <ResultsTitle date={date} />
       <EventList events={filteredEvents} />
     </>
