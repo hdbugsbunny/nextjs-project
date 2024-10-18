@@ -6,7 +6,7 @@ export default function FeedbackPage(props) {
   const [feedbackData, setFeedbackData] = useState();
   const feedbackDetail = (id) => {
     // fetch feedback details from the api
-    fetch(`/api/${id}`)
+    fetch(`/api/feedback/${id}`)
       .then((response) => response.json())
       .then((data) => setFeedbackData(data.feedback))
       .catch((error) =>
