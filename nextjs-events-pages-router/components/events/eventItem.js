@@ -1,3 +1,4 @@
+import Image from "next/image";
 import AddressIcon from "../icons/addressIcon";
 import ArrowRightIcon from "../icons/arrowRightIcon";
 import DateIcon from "../icons/dateIcon";
@@ -17,7 +18,7 @@ export default function EventItem(props) {
 
   return (
     <li className={classes.item}>
-      <img src={formattedImage} alt={title} />
+      <Image src={formattedImage} alt={title} width={250} height={160} />
       <div className={classes.content}>
         <div className={classes.summary}>
           <h2>{title}</h2>
