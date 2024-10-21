@@ -1,4 +1,4 @@
-import { MongoClient } from "mongodb";
+import { connectDatabase, insertDataToDatabase } from "@/helpers/utils";
 
 export default async function handler(req, res, next) {
   if (req.method === "POST") {
@@ -12,10 +12,21 @@ export default async function handler(req, res, next) {
 
     // Store the newsletter subscription in a database
     // (e.g., using MongoDB, Redis, or a third-party service)
-    const client = await MongoClient.connect(process.env.MONGODB_URI);
-    const db = client.db();
-    await db.collection("newsletter").insertOne({ email });
-    client.close();
+    let client;
+    try {
+      client = await connectDatabase();
+    } catch (error) {
+      res.status(500).json({ message: "Error Connecting to The Database" });
+      return;
+    }
+
+    try {
+      await insertDataToDatabase(client, "newsletter", { email });
+      client.close();
+    } catch (error) {
+      res.status(500).json({ message: "Error Saving Newsletter Subscription" });
+      return;
+    }
 
     res.status(201).json({ message: "Newsletter Subscription Successful" });
   }

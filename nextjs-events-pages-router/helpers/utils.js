@@ -1,3 +1,5 @@
+import { MongoClient } from "mongodb";
+
 export async function getFeaturedEvents() {
   const allEvents = await getAllEvents();
 
@@ -36,4 +38,12 @@ export async function getFilteredEvents(dateFilter) {
   });
 
   return filteredEvents;
+}
+
+export async function connectDatabase() {
+  return await MongoClient.connect(process.env.MONGODB_URI);
+}
+
+export async function insertDataToDatabase(client, collection, data) {
+  await client.db().collection(collection).insertOne(data);
 }
