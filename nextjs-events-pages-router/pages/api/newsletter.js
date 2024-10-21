@@ -1,4 +1,6 @@
-export default function handler(req, res, next) {
+import { MongoClient } from "mongodb";
+
+export default async function handler(req, res, next) {
   if (req.method === "POST") {
     const { email } = req.body;
 
@@ -10,8 +12,11 @@ export default function handler(req, res, next) {
 
     // Store the newsletter subscription in a database
     // (e.g., using MongoDB, Redis, or a third-party service)
+    const client = await MongoClient.connect(process.env.MONGODB_URI);
+    const db = client.db();
+    await db.collection("emails").insertOne({ email });
+    client.close();
 
-    console.log("🚀 ~ handler ~ email:", email);
     res.status(201).json({ message: "Newsletter Subscription Successful" });
   }
 }
