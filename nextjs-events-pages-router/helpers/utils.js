@@ -48,6 +48,16 @@ export async function insertDataToDatabase(client, collection, data) {
   await client.db().collection(collection).insertOne(data);
 }
 
-export async function getDataFromDatabase(client, collection, sort) {
-  return await client.db().collection(collection).find().sort(sort).toArray();
+export async function getDataFromDatabase(
+  client,
+  collection,
+  sort,
+  filter = {}
+) {
+  return await client
+    .db()
+    .collection(collection)
+    .find(filter)
+    .sort(sort)
+    .toArray();
 }

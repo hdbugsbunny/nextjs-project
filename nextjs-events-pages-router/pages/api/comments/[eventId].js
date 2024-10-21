@@ -46,7 +46,12 @@ export default async function handler(req, res, next) {
     // and return them as JSON response
     let comments;
     try {
-      comments = await getDataFromDatabase(client, "comments", { _id: -1 });
+      comments = await getDataFromDatabase(
+        client,
+        "comments",
+        { _id: -1 },
+        { eventId }
+      );
       res.status(200).json({ message: "Comments Fetched!", comments });
     } catch (error) {
       res.status(500).json({ message: "Error Fetching Comments" });
