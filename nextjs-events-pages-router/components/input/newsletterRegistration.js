@@ -1,10 +1,22 @@
+import { useRef } from "react";
 import classes from "./newsletterRegistration.module.css";
 
 export default function NewsletterRegistration() {
+  const emailRef = useRef();
+
   const registerHandler = (event) => {
     event.preventDefault();
+    const email = emailRef.current.value;
+
     // Send the email to the server for subscription
-    console.log("Email Subscribed");
+    fetch("/api/newsletter", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    })
+      .then((response) => response.json())
+      .then((responseData) => console.log(responseData))
+      .catch((error) => console.error(error));
   };
 
   return (
@@ -13,6 +25,7 @@ export default function NewsletterRegistration() {
       <form onSubmit={registerHandler}>
         <div className={classes.control}>
           <input
+            ref={emailRef}
             type="email"
             id="email"
             placeholder="Your Email!"
