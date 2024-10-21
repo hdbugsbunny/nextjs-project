@@ -1,5 +1,8 @@
-export default function handler(req, res, next) {
+import { MongoClient } from "mongodb";
+
+export default async function handler(req, res, next) {
   const { eventId } = req.query;
+  const client = await MongoClient.connect(process.env.MONGODB_URI);
 
   if (req.method === "POST") {
     // Add the event comments of particular eventId in the database
@@ -19,8 +22,10 @@ export default function handler(req, res, next) {
     }
 
     // Store the comment in the database
-    const newComment = { id: new Date().toISOString(), email, name, comment };
-    console.log("🚀 ~ handler ~ newComment:", newComment);
+    const newComment = { email, name, comment, eventId };
+    const db = client.db();
+    await db.collection("comments").insertOne(newComment);
+    client.close();
     res.status(201).json({ message: "Comment Added!", comment: newComment });
     return;
   }
@@ -41,5 +46,6 @@ export default function handler(req, res, next) {
       comment: "I'm excited to attend!",
     },
   ];
+  client.close();
   res.status(200).json({ message: "Comments Fetched!", comments });
 }

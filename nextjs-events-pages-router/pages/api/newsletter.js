@@ -14,7 +14,7 @@ export default async function handler(req, res, next) {
     // (e.g., using MongoDB, Redis, or a third-party service)
     const client = await MongoClient.connect(process.env.MONGODB_URI);
     const db = client.db();
-    await db.collection("emails").insertOne({ email });
+    await db.collection("newsletter").insertOne({ email });
     client.close();
 
     res.status(201).json({ message: "Newsletter Subscription Successful" });
