@@ -1,8 +1,18 @@
-import { MongoClient } from "mongodb";
+import {
+  connectDatabase,
+  getDataFromDatabase,
+  insertDataToDatabase,
+} from "@/helpers/utils";
 
 export default async function handler(req, res, next) {
   const { eventId } = req.query;
-  const client = await MongoClient.connect(process.env.MONGODB_URI);
+  let client;
+  try {
+    client = await connectDatabase();
+  } catch (error) {
+    res.status(500).json({ message: "Error Connecting to The Database" });
+    return;
+  }
 
   if (req.method === "POST") {
     // Add the event comments of particular eventId in the database
@@ -18,26 +28,30 @@ export default async function handler(req, res, next) {
       comment.trim() === ""
     ) {
       res.status(422).json({ message: "Invalid Inputs!" });
+      client.close();
       return;
     }
 
     // Store the comment in the database
     const newComment = { email, name, comment, eventId };
-    const db = client.db();
-    await db.collection("comments").insertOne(newComment);
-    client.close();
-    res.status(201).json({ message: "Comment Added!", comment: newComment });
-    return;
+    try {
+      await insertDataToDatabase(client, "comments", newComment);
+      res.status(201).json({ message: "Comment Added!", comment: newComment });
+    } catch (error) {
+      res.status(500).json({ message: "Error Saving Comment" });
+    }
+  } else {
+    // Fetch all the event comments from the database
+    // (e.g., using MongoDB, Redis, or a third-party service)
+    // and return them as JSON response
+    let comments;
+    try {
+      comments = await getDataFromDatabase(client, "comments", { _id: -1 });
+      res.status(200).json({ message: "Comments Fetched!", comments });
+    } catch (error) {
+      res.status(500).json({ message: "Error Fetching Comments" });
+    }
   }
-  // Fetch the event comments from the database
-  // (e.g., using MongoDB, Redis, or a third-party service)
-  // and return them as JSON response
-  const db = client.db();
-  const comments = await db
-    .collection("comments")
-    .find()
-    .sort({ _id: -1 })
-    .toArray();
+
   client.close();
-  res.status(200).json({ message: "Comments Fetched!", comments });
 }
