@@ -1,4 +1,5 @@
 import EventList from "@/components/events/eventList";
+import NewsletterRegistration from "@/components/input/newsletterRegistration";
 import { getFeaturedEvents } from "@/helpers/utils";
 import Head from "next/head";
 
@@ -14,6 +15,7 @@ export default function HomePage(props) {
           content="Discover and book your favorite events"
         />
       </Head>
+      <NewsletterRegistration />
       <EventList events={events} />
     </div>
   );
