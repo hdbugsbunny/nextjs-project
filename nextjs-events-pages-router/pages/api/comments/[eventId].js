@@ -32,20 +32,12 @@ export default async function handler(req, res, next) {
   // Fetch the event comments from the database
   // (e.g., using MongoDB, Redis, or a third-party service)
   // and return them as JSON response
-  const comments = [
-    {
-      id: "1",
-      email: "harshit@example.com",
-      name: "Harshit Durgapal",
-      comment: "This is an excellent event!",
-    },
-    {
-      id: "2",
-      email: "jane@example.com",
-      name: "Jane Smith",
-      comment: "I'm excited to attend!",
-    },
-  ];
+  const db = client.db();
+  const comments = await db
+    .collection("comments")
+    .find()
+    .sort({ _id: -1 })
+    .toArray();
   client.close();
   res.status(200).json({ message: "Comments Fetched!", comments });
 }

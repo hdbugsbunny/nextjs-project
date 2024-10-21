@@ -5,7 +5,7 @@ export default function CommentList({ comments }) {
     <ul className={classes.comments}>
       {/* Render List of Comments - Fetched From API */}
       {comments.map((comment) => (
-        <li key={comment.id}>
+        <li key={comment._id}>
           <p>{comment.comment}</p>
           <div>
             Posted by <address>{comment.name}</address>
