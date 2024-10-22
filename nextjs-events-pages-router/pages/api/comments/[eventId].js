@@ -52,7 +52,11 @@ export default async function handler(req, res, next) {
         { _id: -1 },
         { eventId }
       );
-      res.status(200).json({ message: "Comments Fetched!", comments });
+      if (comments && comments.length === 0) {
+        res.status(200).json({ message: "No Comments Found", comments });
+      } else {
+        res.status(200).json({ message: "Comments Fetched!", comments });
+      }
     } catch (error) {
       res.status(500).json({ message: "Error Fetching Comments" });
     }

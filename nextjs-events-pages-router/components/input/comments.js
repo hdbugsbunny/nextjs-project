@@ -1,19 +1,34 @@
-import { useEffect, useState } from "react";
+import { NotificationContext } from "@/store/notificationContext";
+import { useContext, useEffect, useState } from "react";
 import CommentList from "./commentList";
 import classes from "./comments.module.css";
 import NewComment from "./newComment";
 
 export default function Comments(props) {
   const { eventId } = props;
+  const notificationCtx = useContext(NotificationContext);
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]);
+  const [isLoadingComments, setIsLoadingComments] = useState(false);
 
   useEffect(() => {
     if (showComments) {
-      fetch(`/api/comments/${eventId}`)
-        .then((response) => response.json())
-        .then((responseData) => setComments(responseData.comments))
-        .catch((error) => console.log(error));
+      (async () => {
+        setIsLoadingComments(true);
+        const response = await fetch(`/api/comments/${eventId}`);
+        if (!response.ok) {
+          const responseData = await response.json();
+          notificationCtx.showNotification(
+            "Error!!",
+            responseData.message,
+            "error"
+          );
+        } else {
+          const responseData = await response.json();
+          setComments(responseData.comments);
+        }
+        setIsLoadingComments(false);
+      })();
     }
   }, [showComments]);
 
@@ -21,16 +36,35 @@ export default function Comments(props) {
     setShowComments(!showComments);
   };
 
-  const onSubmitComment = (commentData) => {
+  const onSubmitComment = async (commentData) => {
+    notificationCtx.showNotification(
+      "Comment Submission!",
+      "Submitting Your Comment...",
+      "pending"
+    );
+
     // Send the comment to the server for storage
-    fetch(`/api/comments/${eventId}`, {
+    const response = await fetch(`/api/comments/${eventId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(commentData),
-    })
-      .then((response) => response.json())
-      .then((responseData) => console.log(responseData))
-      .catch((error) => console.error(error));
+    });
+    if (!response.ok) {
+      const responseData = await response.json();
+      notificationCtx.showNotification(
+        "Error!!",
+        responseData.message,
+        "error"
+      );
+    } else {
+      const responseData = await response.json();
+      setComments([responseData.comment, ...comments]);
+      notificationCtx.showNotification(
+        "Success!",
+        responseData.message,
+        "success"
+      );
+    }
   };
 
   return (
@@ -39,7 +73,10 @@ export default function Comments(props) {
         {showComments ? "Hide" : "Show"} Comments
       </button>
       {showComments && <NewComment onSubmitComment={onSubmitComment} />}
-      {showComments && <CommentList comments={comments} />}
+      {showComments && !isLoadingComments && (
+        <CommentList comments={comments} />
+      )}
+      {showComments && isLoadingComments && <p>Loading Comments...</p>}
     </section>
   );
 }

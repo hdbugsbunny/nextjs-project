@@ -8,7 +8,7 @@ export default function NewComment(props) {
   const nameRef = useRef();
   const commentRef = useRef();
 
-  const submitCommentHandler = (event) => {
+  const submitCommentHandler = async (event) => {
     event.preventDefault();
     const email = emailRef.current.value;
     const name = nameRef.current.value;
@@ -28,7 +28,10 @@ export default function NewComment(props) {
     }
 
     setIsInvalid(false);
-    onSubmitComment({ email, name, comment });
+    await onSubmitComment({ email, name, comment });
+    emailRef.current.value = "";
+    nameRef.current.value = "";
+    commentRef.current.value = "";
   };
 
   return (
