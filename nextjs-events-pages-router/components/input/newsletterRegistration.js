@@ -1,22 +1,43 @@
-import { useRef } from "react";
+import { NotificationContext } from "@/store/notificationContext";
+import { useContext, useRef } from "react";
 import classes from "./newsletterRegistration.module.css";
 
 export default function NewsletterRegistration() {
   const emailRef = useRef();
+  const notificationCtx = useContext(NotificationContext);
 
-  const registerHandler = (event) => {
+  const registerHandler = async (event) => {
     event.preventDefault();
     const email = emailRef.current.value;
 
+    notificationCtx.showNotification(
+      "Signing Up...",
+      "Registering For Newsletter",
+      "pending"
+    );
+
     // Send the email to the server for subscription
-    fetch("/api/newsletter", {
+    const response = await fetch("/api/newsletter", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
-    })
-      .then((response) => response.json())
-      .then((responseData) => console.log(responseData))
-      .catch((error) => console.error(error));
+    });
+    if (!response.ok) {
+      const responseData = await response.json();
+      notificationCtx.showNotification(
+        "Error!!",
+        responseData.message,
+        "error"
+      );
+    } else {
+      const responseData = await response.json();
+      notificationCtx.showNotification(
+        "Success!!",
+        responseData.message,
+        "success"
+      );
+    }
+    emailRef.current.value = "";
   };
 
   return (
