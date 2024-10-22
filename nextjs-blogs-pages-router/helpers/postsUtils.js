@@ -4,7 +4,7 @@ import path from "path";
 
 const postsDir = path.join(process.cwd(), "posts");
 
-const getPostData = (fileName) => {
+export function getPostData(fileName) {
   const filePath = path.join(postsDir, fileName);
   const fileContent = fs.readFileSync(filePath, "utf-8");
   const { data, content } = matter(fileContent);
@@ -14,7 +14,7 @@ const getPostData = (fileName) => {
     content,
     ...data,
   };
-};
+}
 
 export function getAllPosts() {
   const postsFiles = fs.readdirSync(postsDir);
