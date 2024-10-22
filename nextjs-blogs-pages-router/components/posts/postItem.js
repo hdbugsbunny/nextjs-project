@@ -10,13 +10,19 @@ export default function PostItem({ post }) {
     year: "numeric",
   });
   const formattedLink = `/posts/${id}`;
-  const formattedImage = `/images/posts/${id}/${image}`;
+  const formattedImage = `/images/posts/${image}`;
 
   return (
-    <li key={id} className={classes.post}>
+    <li className={classes.post}>
       <Link href={formattedLink}>
         <div className={classes.image}>
-          <Image src={formattedImage} alt={title} width={300} height={200} />
+          <Image
+            src={formattedImage}
+            alt={title}
+            width={300}
+            height={200}
+            layout="responsive"
+          />
         </div>
         <div className={classes.content}>
           <h3>{title}</h3>
