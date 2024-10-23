@@ -16,7 +16,8 @@ export default function handler(req, res, next) {
     // Send email to the server using a library like nodemailer
     // ...
     const newMessage = { name, email, message };
+    console.log("🚀 ~ handler ~ newMessage:", newMessage);
 
-    res.status(201).json({ message: "Message sent successfully!", newMessage });
+    res.status(201).json({ message: "Message sent successfully!" });
   }
 }
