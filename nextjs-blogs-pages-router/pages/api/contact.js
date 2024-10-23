@@ -1,4 +1,6 @@
-export default function handler(req, res, next) {
+import { MongoClient } from "mongodb";
+
+export default async function handler(req, res, next) {
   if (req.method === "POST") {
     const { name, email, message } = req.body;
     if (
@@ -13,11 +15,28 @@ export default function handler(req, res, next) {
       return;
     }
 
-    // Send email to the server using a library like nodemailer
-    // ...
     const newMessage = { name, email, message };
-    console.log("🚀 ~ handler ~ newMessage:", newMessage);
+    // Save the new message to the MongoDB database
+    let client;
+    try {
+      client = await MongoClient.connect(process.env.MONGODB_URI);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to Connect to The Database!" });
+      return;
+    }
 
-    res.status(201).json({ message: "Message sent successfully!" });
+    const db = client.db();
+    try {
+      await db.collection("messages").insertOne(newMessage);
+    } catch (error) {
+      client.close();
+      res
+        .status(500)
+        .json({ message: "Failed to Save Message to The Database!" });
+      return;
+    }
+
+    client.close();
+    res.status(201).json({ message: "Message Sent Successfully!", newMessage });
   }
 }
