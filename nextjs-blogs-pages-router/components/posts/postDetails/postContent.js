@@ -1,9 +1,14 @@
 import Image from "next/image";
 import ReactMarkdown from "react-markdown";
-import { Prism } from "react-syntax-highlighter";
-import { atomDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { PrismLight } from "react-syntax-highlighter";
+import css from "react-syntax-highlighter/dist/cjs/languages/prism/css";
+import js from "react-syntax-highlighter/dist/cjs/languages/prism/javascript";
+import atomDark from "react-syntax-highlighter/dist/cjs/styles/prism/atom-dark";
 import classes from "./postContent.module.css";
 import PostHeader from "./postHeader";
+
+PrismLight.registerLanguage("js", js);
+PrismLight.registerLanguage("css", css);
 
 export default function PostContent({ post }) {
   const formattedImage = `/images/posts/${post.image}`;
@@ -30,7 +35,9 @@ export default function PostContent({ post }) {
     code: ({ children, className }) => {
       const language = className.split("-")[1];
 
-      return <Prism style={atomDark} language={language} children={children} />;
+      return (
+        <PrismLight style={atomDark} language={language} children={children} />
+      );
     },
   };
 
