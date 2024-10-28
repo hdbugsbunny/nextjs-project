@@ -1,3 +1,4 @@
+import { signIn } from "next-auth/react";
 import { useRef, useState } from "react";
 import classes from "./authForm.module.css";
 
@@ -17,6 +18,17 @@ export default function AuthForm() {
     const body = { email, password };
 
     if (isLogin) {
+      // Make API call to server to handle login
+      const response = await signIn("credentials", {
+        email,
+        password,
+        redirect: false, // Don't redirect to home page after login
+      });
+      if (!response.ok) {
+        console.log("Error>>>", response.error);
+        return;
+      }
+      console.log("User logged in successfully!", response);
     } else {
       // Make API call to server to handle signup
       const response = await fetch("/api/auth/signup", {
