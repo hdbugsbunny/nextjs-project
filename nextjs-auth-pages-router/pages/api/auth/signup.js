@@ -2,6 +2,11 @@ import { hashPassword } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/db";
 
 export default async function handler(req, res, next) {
+  if (req.method !== "POST") {
+    res.status(404).json({ message: "Method Not Allowed!" });
+    return;
+  }
+
   const { email, password } = req.body;
   if (
     !email ||
@@ -40,6 +45,5 @@ export default async function handler(req, res, next) {
     res.status(201).json({ message: "User Created Successfully!" });
   } catch (error) {
     res.status(500).json({ message: "User Creation Failed!" });
-    return;
   }
 }
