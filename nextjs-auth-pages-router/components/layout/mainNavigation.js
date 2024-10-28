@@ -1,10 +1,9 @@
-import { signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/client";
 import Link from "next/link";
 import classes from "./mainNavigation.module.css";
 
 export default function MainNavigation() {
-  const { data: session, status } = useSession();
-  const loading = status === "loading";
+  const [session, loading] = useSession();
 
   return (
     <header className={classes.header}>

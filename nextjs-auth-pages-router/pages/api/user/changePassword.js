@@ -1,6 +1,6 @@
 import { comparePassword, hashPassword } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/db";
-import { getSession } from "next-auth/react";
+import { getSession } from "next-auth/client";
 
 export default async function handler(req, res, next) {
   if (req.method !== "PATCH") {
@@ -14,7 +14,7 @@ export default async function handler(req, res, next) {
     return;
   }
 
-  const { email } = session;
+  const { email } = session.user;
   const { newPassword, oldPassword } = req.body;
   if (
     !oldPassword ||

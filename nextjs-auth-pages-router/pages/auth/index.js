@@ -1,5 +1,5 @@
 import AuthForm from "@/components/auth/authForm";
-import { getSession } from "next-auth/react";
+import { getSession } from "next-auth/client";
 
 export default function AuthPage() {
   return <AuthForm />;

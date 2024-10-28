@@ -1,16 +1,15 @@
 import { comparePassword } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/db";
 import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
+import Providers from "next-auth/providers";
 
 export default NextAuth({
   session: {
     jwt: true,
   },
   providers: [
-    CredentialsProvider({
+    Providers.Credentials({
       authorize: async (credentials) => {
-        console.log("🚀 ~ authorize: ~ credentials:", credentials);
         const client = await connectToDatabase();
         if (!client) {
           throw new Error("Can't Connect To Database!");
