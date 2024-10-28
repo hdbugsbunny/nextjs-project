@@ -1,4 +1,5 @@
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import classes from "./authForm.module.css";
 
@@ -6,6 +7,7 @@ export default function AuthForm() {
   const [isLogin, setIsLogin] = useState(false);
   const emailRef = useRef();
   const passwordRef = useRef();
+  const router = useRouter();
 
   const toggleAuth = () => {
     setIsLogin((prevIsLogin) => !prevIsLogin);
@@ -28,7 +30,7 @@ export default function AuthForm() {
         console.log("Error>>>", response.error);
         return;
       }
-      console.log("User logged in successfully!", response);
+      router.replace("/profile");
     } else {
       // Make API call to server to handle signup
       const response = await fetch("/api/auth/signup", {
@@ -43,7 +45,7 @@ export default function AuthForm() {
         console.log("Error>>>", data.message);
         return;
       }
-      console.log("User created successfully!", data);
+      router.replace("/");
     }
   };
 
