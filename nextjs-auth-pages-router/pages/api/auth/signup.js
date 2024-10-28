@@ -21,29 +21,36 @@ export default async function handler(req, res, next) {
     return;
   }
 
-  let hashedPassword;
-  try {
-    hashedPassword = await hashPassword(password);
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Something Went Wrong! Please Try Again!" });
-    return;
-  }
-
-  let client;
-  try {
-    client = await connectToDatabase();
-  } catch (error) {
+  const client = await connectToDatabase();
+  if (!client) {
     res.status(500).json({ message: "Can't Connect To Database!" });
     return;
   }
 
   const db = client.db();
-  try {
-    await db.collection("users").insertOne({ email, password: hashedPassword });
-    res.status(201).json({ message: "User Created Successfully!" });
-  } catch (error) {
-    res.status(500).json({ message: "User Creation Failed!" });
+  const existingUser = await db.collection("users").findOne({ email });
+  if (existingUser) {
+    res.status(422).json({ message: "Email Address Is Already Taken!" });
+    client.close();
+    return;
   }
+
+  const hashedPassword = await hashPassword(password);
+  if (!hashedPassword) {
+    res.status(500).json({ message: "Can't Hash Password!" });
+    client.close();
+    return;
+  }
+
+  const result = await db
+    .collection("users")
+    .insertOne({ email, password: hashedPassword });
+  if (!result.acknowledged) {
+    res.status(500).json({ message: "User Creation Failed!" });
+    client.close();
+    return;
+  }
+
+  res.status(201).json({ message: "User Created Successfully!" });
+  client.close();
 }
