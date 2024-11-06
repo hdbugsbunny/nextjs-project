@@ -32,5 +32,5 @@ export async function getStaticProps() {
   const meetups = DUMMY_LIST;
 
   // Pass data to the page via props
-  return { props: { meetups } };
+  return { props: { meetups }, revalidate: 10 };
 }
