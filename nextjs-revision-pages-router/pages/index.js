@@ -17,6 +17,14 @@ const DUMMY_LIST = [
     address: "Paris, France",
     description: "Discover the ReactJS community!",
   },
+  {
+    id: "m3",
+    title: "Vue.js Meetup in Tokyo",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Vue_js_logo_2016.svg/1200px-Vue_js_logo_2016.svg.png",
+    address: "Tokyo, Japan",
+    description: "Learn more about Vue.js and join our meetup!",
+  }
 ];
 
 export default function HomePage({ meetups }) {

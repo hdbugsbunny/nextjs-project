@@ -8,7 +8,7 @@ export default function NewMeetupForm({ onAddMeetup }) {
   const addressRef = useRef();
   const descriptionRef = useRef();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const title = titleRef.current.value;
@@ -16,7 +16,7 @@ export default function NewMeetupForm({ onAddMeetup }) {
     const address = addressRef.current.value;
     const description = descriptionRef.current.value;
 
-    onAddMeetup({ title, image, address, description });
+    await onAddMeetup({ title, image, address, description });
 
     titleRef.current.value = "";
     imageRef.current.value = "";
