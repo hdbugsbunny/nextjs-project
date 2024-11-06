@@ -18,7 +18,7 @@ export async function getStaticPaths() {
   // Connect to MongoDB
   const client = await MongoClient.connect(process.env.MONGODB_URI);
   if (!client) {
-    return { paths: [], fallback: false };
+    return { paths: [], fallback: "blocking" };
   }
 
   const db = client.db();
@@ -32,7 +32,7 @@ export async function getStaticPaths() {
 
   // Return paths
   client.close();
-  return { paths, fallback: false };
+  return { paths, fallback: "blocking" };
 }
 
 export async function getStaticProps(context) {
