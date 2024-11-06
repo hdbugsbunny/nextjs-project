@@ -33,7 +33,7 @@ export async function getStaticProps() {
 
   // Close the MongoDB connection
   client.close();
-  return { props: { meetups } };
+  return { props: { meetups }, revalidate: 10 };
 }
 
 // export async function getServerSideProps(context) {

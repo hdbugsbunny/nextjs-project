@@ -32,7 +32,7 @@ export async function getStaticPaths() {
 
   // Return paths
   client.close();
-  return { paths, fallback: "blocking" };
+  return { paths, fallback: true };
 }
 
 export async function getStaticProps(context) {
