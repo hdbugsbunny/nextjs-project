@@ -3,6 +3,10 @@ import { MongoClient, ObjectId } from "mongodb";
 import Head from "next/head";
 
 export default function MeetupDetailPage({ meetup }) {
+  if (!meetup) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <>
       <Head>
