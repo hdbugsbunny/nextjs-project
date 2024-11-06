@@ -19,10 +19,18 @@ const DUMMY_LIST = [
   },
 ];
 
-export default function HomePage() {
+export default function HomePage({ meetups }) {
   return (
     <>
-      <MeetupList meetups={DUMMY_LIST} />
+      <MeetupList meetups={meetups} />
     </>
   );
+}
+
+export async function getStaticProps() {
+  // Fetch data from an API
+  const meetups = DUMMY_LIST;
+
+  // Pass data to the page via props
+  return { props: { meetups } };
 }
