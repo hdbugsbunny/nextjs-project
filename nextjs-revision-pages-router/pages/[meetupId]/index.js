@@ -1,35 +1,58 @@
 import MeetupDetail from "@/components/meetups/meetupDetail";
+import { MongoClient, ObjectId } from "mongodb";
 
 export default function MeetupDetailPage({ meetup }) {
   return <MeetupDetail {...meetup} />;
 }
 
 export async function getStaticPaths() {
-  // Fetch data from an API
-  const meetupIds = ["m1", "m2"];
+  // Connect to MongoDB
+  const client = await MongoClient.connect(process.env.MONGODB_URI);
+  if (!client) {
+    return { paths: [], fallback: false };
+  }
+
+  const db = client.db();
+  const meetupsCollection = db.collection("meetups");
+  const meetupIds = await meetupsCollection.find({}, { _id: 1 }).toArray();
 
   // Generate paths for all meetup IDs
-  const paths = meetupIds.map((id) => ({
-    params: { meetupId: id },
+  const paths = meetupIds.map((doc) => ({
+    params: { meetupId: doc._id.toString() },
   }));
 
   // Return paths
+  client.close();
   return { paths, fallback: false };
 }
 
 export async function getStaticProps(context) {
   const { meetupId } = context.params;
 
-  // Fetch data from an API
+  // Connect to MongoDB
+  const client = await MongoClient.connect(process.env.MONGODB_URI);
+  if (!client) {
+    return { props: { meetup: null } };
+  }
+
+  const db = client.db();
+  const meetupsCollection = db.collection("meetups");
+  const meetupData = await meetupsCollection.findOne({
+    _id: new ObjectId(meetupId),
+  });
+  if (!meetupData) {
+    return { props: { meetup: null } };
+  }
+
   const meetup = {
-    id: meetupId,
-    title: "NextJS Meetup in Berlin",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Museumsinsel_Berlin_Juli_2021_1_%28cropped%29_b.jpg/1024px-Museumsinsel_Berlin_Juli_2021_1_%28cropped%29_b.jpg",
-    address: "Berlin, Germany",
-    description: "Join us for a free NextJS meetup!",
+    id: meetupData._id.toString(),
+    title: meetupData.title,
+    image: meetupData.image,
+    address: meetupData.address,
+    description: meetupData.description,
   };
 
   // Pass data to the page via props
+  client.close();
   return { props: { meetup } };
 }
