@@ -1,8 +1,17 @@
 import MeetupDetail from "@/components/meetups/meetupDetail";
 import { MongoClient, ObjectId } from "mongodb";
+import Head from "next/head";
 
 export default function MeetupDetailPage({ meetup }) {
-  return <MeetupDetail {...meetup} />;
+  return (
+    <>
+      <Head>
+        <title>{meetup.title}</title>
+        <meta name="description" content={meetup.description} />
+      </Head>
+      <MeetupDetail {...meetup} />
+    </>
+  );
 }
 
 export async function getStaticPaths() {

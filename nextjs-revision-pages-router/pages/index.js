@@ -1,9 +1,14 @@
 import MeetupList from "@/components/meetups/meetupList";
 import { MongoClient } from "mongodb";
+import Head from "next/head";
 
 export default function HomePage({ meetups }) {
   return (
     <>
+      <Head>
+        <title>Next.js Meetup App</title>
+        <meta name="description" content="Find and share local meetups" />
+      </Head>
       <MeetupList meetups={meetups} />
     </>
   );
