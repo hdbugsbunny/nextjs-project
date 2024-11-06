@@ -34,3 +34,14 @@ export async function getStaticProps() {
   // Pass data to the page via props
   return { props: { meetups }, revalidate: 10 };
 }
+
+// export async function getServerSideProps(context) {
+//   const { req, res } = context;
+//   console.log("🚀 ~ getServerSideProps ~ { req, res }:", { req, res });
+
+//   // Fetch data from an API
+//   const meetups = DUMMY_LIST;
+
+//   // Pass data to the page via props
+//   return { props: { meetups } };
+// }
